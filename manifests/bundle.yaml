@@ -19,6 +19,14 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
+          volumeMounts:
+            - name: tls
+              mountPath: "/tls"
+              readOnly: true
+      volumes:
+        - name: tls
+          secret:
+            secretName: k8s-gcr-quickfix-tls
 ---
 kind: Service
 apiVersion: v1
@@ -40,7 +48,7 @@ metadata:
 webhooks:
   - name: gcr-to-registry.webhook.dev
     clientConfig:
-      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN0akNDQVo0Q0NRRHRBMFIvVHV2U3N6QU5CZ2txaGtpRzl3MEJBUXNGQURBZE1Sc3dHUVlEVlFRRERCSkgKUTFJZ2RHOGdVbVZuYVhOMGNua2dRMEV3SGhjTk1qTXdNekV3TURRMU9USXlXaGNOTWpNd05EQTVNRFExT1RJeQpXakFkTVJzd0dRWURWUVFEREJKSFExSWdkRzhnVW1WbmFYTjBjbmtnUTBFd2dnRWlNQTBHQ1NxR1NJYjNEUUVCCkFRVUFBNElCRHdBd2dnRUtBb0lCQVFDK1MxSm1rNVFlWHIvaDBPV0FsU01pLzV4VzcxQ2tiUVpQYWhWVWswVi8KMnY2YVNNNTZVeFp1NXZNbkFDYUNPY2RSOTJNSXJIbTU2bVVXMWtXNThMeEpuRnNzUGEvU1Bpc2NIeHlCQlRuTQpwTFA3bnRYYVVmQThpQ0ZPS1RhMDZnenRBeTFwb0ovWmJFWmFxR1hRYWUrRlRnWjNydTVwcEpXaXVERWpJMWU0CmUzbzU0dHJ5d3N3ZDQwUXd1VElRZDBqMDZxUWxLQUlQUi8rVkRLLyszdHA4OGgxb3JkZFYxNWZETUVTK09MRjkKMDV0WWxnZ3BBaU9Pd0Y5d1cxc3c5dEhoWThjM3NsWDRaVmFweGRmU2pXTXVZa1hUOS9XZE5jNkEwMlc1UklGdgpMY2dtVjQreHJpY3ZpUk5MMnBRNDNrbUd6UUxrTUFENStwRDh5YXUxS2ZIZkFnTUJBQUV3RFFZSktvWklodmNOCkFRRUxCUUFEZ2dFQkFEbXhCTWpFdnE4SFFQRmNLOG5zNEVXMVMxRFBxa0pLbTJ1N2ZGaVdpYjlHUkdpeUwvMEsKTi9BTTJUSUltSlZ6WllUZUZQNlBmaEFLZ2I4KzgxNllXZDE0ZmU1SHVoSytzTzg2TktEWk5lQW9NZ3U1Sy9tMwozUmFWMkJUUk15WnhMNWRCenBobWcvajFId3FXMjNMc041ZU03cEdKOG9aOU9ldWxrQnk0TUZ3NEdhMnpvZnQyCmpFcWxIeHVpZERaSDNBck5ld21Td3JZc3hYcWhqNEx4Sm9zTng2QnNRbExadTd1WG1BVEt3SzRsbGhTelhxSFoKMVlxSDZ3aENJcStjWVZXeUs4WDg1ZmZ6L0JDSkhrUlY1WnBuNGQvQStObHBlYzBPZXZMc210UE4wVlFLejZQbwo5Sy9keWxpeGlidXVxcUpzdjdIWU4rOHVlc2Y5UUw5YTNiVT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      caBundle: REPLACEME
       service:
         namespace: kube-system
         name: gcr-to-registry-webhook

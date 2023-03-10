@@ -6,15 +6,17 @@ If you are unsure whether you are affected by this, please use the [community-im
 
 ## Solution 1: Mutating Webhook
 
-tl;dr: Run this command on your cluster, assuming you have `kubeadmin` permissions:
+tl;dr: Run this command on your cluster assuming you have `kubeadmin` permissions and openssl installed:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/abstractinfrastructure/k8s-gcr-quickfix/main/manifests/bundle.yaml
+curl -L https://raw.githubusercontent.com/abstractinfrastructure/k8s-gcr-quickfix/main/install.sh | bash
 ```
 
 This will create a MutatingWebhook in your cluster that watches for any **new** pod to be created, and will automatically replace `k8s.gcr.io` with `registry.k8s.io`.
 
-The logic behind it is in [cmd/main.go](cmd/main.go). The one note: It has a self-signed certificate bundled with it. We can't assume every cluster is running [cert-manager](https://cert-manager.io), and this is the easiest way to move forward.
+The logic behind it is in [cmd/main.go](cmd/main.go). The majority of the install script is generating self-signed certificates for the Webhook to use. 
+
+**Note**: If you're running this in OSX, make sure you have GNU sed installed please. :) 
 
 ## Solution 2: Kyverno Policy
 

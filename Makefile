@@ -7,10 +7,6 @@ build-docker:
 build-push:
 	docker push $$(whoami)/k8s-gcr-quickfix:main
 
-ssl-cert:
-	./generate-keys.sh
-	openssl base64 -A <"ssl/ca.crt"
-
 run:
 	go run cmd/main.go
 
@@ -18,9 +14,15 @@ kind-create:
 	kind create cluster --config kind.yaml
 
 kind-apply:
-	kubectl apply -f manifests
+	cp manifests/bundle.yaml .
+	sed -i "s/ghcr\.io\/abstractinfrastructure/$$(whoami)/" bundle.yaml
+	./install.sh
 
 test: kind-create build-docker build-push kind-apply
+	echo "Sleeping 60 because lazy programming"
+	sleep 60
+	kubectl apply -f tests/badpod.yaml
+	kubectl -n default describe pod bad-pod
 
 test-stop:
 	kind delete cluster
