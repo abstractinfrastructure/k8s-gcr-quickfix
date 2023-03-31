@@ -23,7 +23,7 @@ kubectl -n kube-system create secret tls k8s-gcr-quickfix-tls \
   --cert=server.crt \
   --key=server.key \
 
-CA=$(cat ca.crt | base64 )
+CA=$(base64 ca.crt | tr '\n' ' ' | sed 's/ //g')
 
 echo
 echo ">> MutatingWebhookConfiguration caBundle: $CA"
